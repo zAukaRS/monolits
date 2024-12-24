@@ -1,0 +1,33 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создайте новый вопрос</title>
+    <link rel="stylesheet" href="{% static 'css/create_question.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Создайте новый вопрос</h1>
+        <form method="post" enctype="multipart/form-data" class="question-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <h2>Варианты ответа</h2>
+            {{ option_formset.management_form }}
+            <div class="options">
+                {% for form in option_formset %}
+                    <div class="option">
+                        {{ form.as_p }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="submit-btn">Создать</button>
+        </form>
+    </div>
+</body>
+</html>
+{% endblock %}

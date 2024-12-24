@@ -1,0 +1,20 @@
+.options {
+    margin: 20px 0;
+}
+
+.options label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    background-color: #6a0dad;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #5b0cae;
+}

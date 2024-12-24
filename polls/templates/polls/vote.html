@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Голосование: {{ question.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/vote.css' %}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="{% url 'home' %}" class="logo">MySite</a>
+                <ul class="nav-links">
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'edit_profile' %}">Профиль</a></li>
+                        <li><a href="{% url 'logout' %}">Выход</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Регистрация</a></li>
+                        <li><a href="{% url 'login' %}">Вход</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="vote-container">
+            <h1>{{ question.title }}</h1>
+            {% if question.image %}
+                <div class="image-container">
+                    <img src="{{ question.image.url }}" alt="Image">
+                </div>
+            {% endif %}
+            <p>{{ question.full_description }}</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <p>Выберите вариант:</p>
+                <div class="options">
+                    {% if not user_has_voted %}
+                        {% for option in form.fields.option.queryset %}
+                            <label>
+                                <input type="radio" name="option" value="{{ option.id }}">
+                                {{ option.text }}
+                            </label>
+                        {% endfor %}
+                    {% else %}
+                        <p>Вы уже проголосовали за этот вопрос.</p>
+                    {% endif %}
+                </div>
+                {% if not user_has_voted %}
+                    <button type="submit" class="btn btn-primary">Проголосовать</button>
+                {% endif %}
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MySite. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

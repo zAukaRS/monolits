@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="{% url 'home' %}" class="logo">MySite</a>
+                <ul class="nav-links">
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'edit_profile' %}">Профиль</a></li>
+                        <li><a href="{% url 'logout' %}">Выход</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Регистрация</a></li>
+                        <li><a href="{% url 'login' %}">Вход</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <div class="container">
+                <h1>Добро пожаловать на наш сайт</h1>
+                <p>Здесь вы можете участвовать в голосованиях, просматривать результаты и делиться своими идеями.</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'create_question' %}" class="btn btn-primary">Создать заявку</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="questions">
+            <h2>Последние вопросы</h2>
+            {% for question in questions %}
+                <div class="question">
+                    <h3><a href="{% url 'question_detail' question.id %}">{{ question.title }}</a></h3>
+                    <p>{{ question.full_description|truncatewords:20 }}</p>
+                    {% if question.image %}
+                        <img src="{{ question.image.url }}" alt="{{ question.title }}">
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>Нет доступных вопросов для отображения.</p>
+            {% endfor %}
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MySite. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

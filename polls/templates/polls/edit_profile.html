@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование профиля</title>
+    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="{% url 'home' %}" class="logo">MySite</a>
+                <ul class="nav-links">
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'edit_profile' %}">Профиль</a></li>
+                        <li><a href="{% url 'logout' %}">Выход</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Регистрация</a></li>
+                        <li><a href="{% url 'login' %}">Вход</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <h1>Редактирование профиля</h1>
+            <form method="post" enctype="multipart/form-data" class="form-container">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}" class="form-label">Имя</label>
+                    {{ form.nickname }}
+                    <div class="form-error">{{ form.nickname.errors }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                    {{ form.email }}
+                    <div class="form-error">{{ form.email.errors }}</div>
+                </div>
+
+                <div class="form-group">
+                    {% if user.profile.avatar %}
+                        <p class="form-label">Аватар:</p>
+                        <img src="{{ user.profile.avatar.url }}" alt="Аватар" class="profile-avatar">
+                    {% else %}
+                        <p>Аватар не загружен.</p>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-submit">Сохранить</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MySite. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

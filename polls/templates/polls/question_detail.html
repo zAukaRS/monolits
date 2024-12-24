@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ question.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/question_detail.css' %}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="{% url 'home' %}" class="logo">MySite</a>
+                <ul class="nav-links">
+                    <li><a href="{% url 'home' %}">Главная</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'edit_profile' %}">Профиль</a></li>
+                        <li><a href="{% url 'logout' %}">Выход</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Регистрация</a></li>
+                        <li><a href="{% url 'login' %}">Вход</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="question-container">
+            <h1>{{ question.title }}</h1>
+            {% if question.image %}
+                <div class="image-container">
+                    <img src="{{ question.image.url }}" alt="Image">
+                </div>
+            {% endif %}
+            <div class="description">
+                <p>{{ question.full_description }}</p>
+            </div>
+
+            {% if user.is_authenticated %}
+                <div class="vote-button">
+                    <a href="{% url 'vote' question.id %}" class="btn btn-primary">Проголосовать</a>
+                </div>
+            {% else %}
+                <p class="login-prompt"><a href="{% url 'login' %}">Войдите</a>, чтобы проголосовать.</p>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MySite. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты: {{ question.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/results.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Результаты голосования: {{ question.title }}</h1>
+        <ul>
+            {% for option in options %}
+                <li>
+                    {{ option.text }}: {{ option.votes }} голос(ов)
+                    ({{ option.percentage|floatformat:2 }}%)
+                    <div class="bar" style="width: {{ option.percentage }}%;"></div>
+                </li>
+            {% endfor %}
+        </ul>
+        <p>Всего голосов: {{ total_votes }}</p>
+        <a href="{% url 'home' %}">Назад на главную</a>
+    </div>
+</body>
+</html>
